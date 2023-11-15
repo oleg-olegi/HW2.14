@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.ArrayList;
+
 public interface CustomListInterface {
     // Добавление элемента.
     // Вернуть добавленный элемент
@@ -59,10 +61,12 @@ public interface CustomListInterface {
     // Сравнить текущий список с другим.
     // Вернуть true/false или исключение,
     // если передан null.
-    boolean equals(CustomListImpl otherList);
+    boolean equals(ArrayList otherList);
 
     // Вернуть фактическое количество элементов.
     int size();
+
+    int number();
 
     // Вернуть true,
     // если элементов в списке нет,

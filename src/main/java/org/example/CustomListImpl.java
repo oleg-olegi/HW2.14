@@ -2,9 +2,11 @@ package org.example;
 
 import org.example.exceptions.CellIsNotEmptyException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
-public class CustomListImpl /* implements CustomListInterface */ {
+public class CustomListImpl implements CustomListInterface {
     private int capacity;
     private int countOfItems = 0;
     private String[] stringsList;
@@ -17,10 +19,6 @@ public class CustomListImpl /* implements CustomListInterface */ {
         this.stringsList = new String[capacity];
     }
 
-    public int getCapacity() {
-        return this.capacity;
-    }
-
     public String[] getStringsList() {
         return this.stringsList;
     }
@@ -29,7 +27,7 @@ public class CustomListImpl /* implements CustomListInterface */ {
         return stringsList.length;
     }
 
-    //    @Override
+    @Override
     public String add(String item) {
         if (item == null) {
             throw new IllegalArgumentException();
@@ -41,11 +39,11 @@ public class CustomListImpl /* implements CustomListInterface */ {
                 break;
             }
         }
-
         return item;
     }
 
-    /* @Override*/
+    @Override
+
     public String add(int index, String item) {
         if (stringsList[index] == null && index < size() && 0 < index) {
             stringsList[index] = item;
@@ -55,13 +53,13 @@ public class CustomListImpl /* implements CustomListInterface */ {
         throw new CellIsNotEmptyException("Ячейка занята");
     }
 
-    /*  @Override*/
+    @Override
     public String set(int index, String item) {
         stringsList[index] = item;
         return item;
     }
 
-    /*  @Override*/
+    @Override
     public String remove(String item) {
         for (int i = 0; i < size(); i++) {
             if (Objects.equals(stringsList[i], item)) {
@@ -73,14 +71,14 @@ public class CustomListImpl /* implements CustomListInterface */ {
         throw new IllegalArgumentException("Item not found");
     }
 
-    /*  @Override*/
+    @Override
     public String remove(int index) {
         stringsList[index] = null;
         countOfItems--;
         return null;
     }
 
-    /*  @Override*/
+    @Override
     public boolean contains(String item) {
         for (String e : stringsList) {
             if (e.equals(item)) {
@@ -90,7 +88,7 @@ public class CustomListImpl /* implements CustomListInterface */ {
         return false;
     }
 
-    /*  @Override*/
+    @Override
     public int indexOf(String item) {
         for (int i = 0; i < size(); i++) {
             if (Objects.equals(stringsList[i], item)) {//метод для обхода NullPointerException
@@ -101,7 +99,7 @@ public class CustomListImpl /* implements CustomListInterface */ {
     }
 
 
-    /*  @Override*/
+    @Override
     public int lastIndexOf(String item) {
         for (int i = size(); i >= 0; i--) {
             if (Objects.equals(item, stringsList[i])) {
@@ -111,37 +109,47 @@ public class CustomListImpl /* implements CustomListInterface */ {
         return -1;
     }
 
-    /*   @Override*/
+    @Override
     public String get(int index) {
-        if (index > countOfItems|| stringsList[index]==null) {
+        if (index > countOfItems || stringsList[index] == null) {
             throw new ArrayIndexOutOfBoundsException("Invalid index");
         }
         return stringsList[index];
     }
 
-      /*  @Override
-        public boolean equals (ArrayList otherList){
-            return false;
+    @Override
+    public boolean equals(ArrayList otherList) {
+        return Arrays.equals(stringsList,otherList.toArray());
+    }
+
+    @Override
+    public int number() { //вместо size
+        return countOfItems;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return countOfItems == 0;
+    }
+
+    @Override
+    public void clear() {
+        for (String e : stringsList) {
+            e = null;
         }
+        countOfItems = 0;
+    }
 
-        @Override
-        public int size () {
-            return 0;
+    @Override
+    public String[] toArray() {
+        String[] newArray = new String[countOfItems];
+        int counter = 0; //счетчик существующих объектов, если объеты добавлены в массив не по  порядку
+        for (int i = 0; i < size(); i++) {
+            if (stringsList[i] != null) {
+                newArray[counter] = stringsList[i];
+                counter++;
+            }
         }
-
-        @Override
-        public boolean isEmpty () {
-            return false;
-        }
-
-        @Override
-        public void clear () {
-
-        }
-
-        @Override
-        public String[] toArray () {
-            return new String[0];
-        }*/
-
+        return newArray;
+    }
 }
