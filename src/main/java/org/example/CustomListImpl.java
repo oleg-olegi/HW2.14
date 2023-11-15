@@ -2,8 +2,6 @@ package org.example;
 
 import org.example.exceptions.CellIsNotEmptyException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class CustomListImpl implements CustomListInterface {
