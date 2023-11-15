@@ -21,7 +21,7 @@ public class Main {
         liiiistt.add("bvjkg");
         liiiistt.add("Andrey Krukau");
         liiiistt.add("petya");
-        System.out.println(Arrays.equals(newArr,liiiistt.toArray()));
+        System.out.println(list.equals(liiiistt.toArray()));
         System.out.println(Arrays.toString(newArr));
         System.out.println("list = " + Arrays.toString(list.getStringsList()));
     }

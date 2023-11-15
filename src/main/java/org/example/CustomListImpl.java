@@ -118,8 +118,17 @@ public class CustomListImpl implements CustomListInterface {
     }
 
     @Override
-    public boolean equals(ArrayList otherList) {
-        return Arrays.equals(stringsList,otherList.toArray());
+    public boolean equals(String[] otherList) {
+        if (size() != otherList.length){
+            return false;
+        }
+        int count = 0;
+        for (int i = 0; i < size(); i++) {
+            if (Objects.equals(stringsList[i], otherList[i])) {
+                count++;
+            }
+        }
+        return count==size();
     }
 
     @Override

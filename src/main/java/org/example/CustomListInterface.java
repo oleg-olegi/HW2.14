@@ -61,7 +61,7 @@ public interface CustomListInterface {
     // Сравнить текущий список с другим.
     // Вернуть true/false или исключение,
     // если передан null.
-    boolean equals(ArrayList otherList);
+    boolean equals(String[] otherList);
 
     // Вернуть фактическое количество элементов.
     int size();
