@@ -41,7 +41,6 @@ public class CustomListImpl implements CustomListInterface {
     }
 
     @Override
-
     public String add(int index, String item) {
         if (stringsList[index] == null && index < size() && 0 < index) {
             stringsList[index] = item;
@@ -73,13 +72,13 @@ public class CustomListImpl implements CustomListInterface {
     public String remove(int index) {
         stringsList[index] = null;
         countOfItems--;
-        return null;
+        return stringsList[index];
     }
 
     @Override
     public boolean contains(String item) {
         for (String e : stringsList) {
-            if (e.equals(item)) {
+            if (Objects.equals(e, item)) {
                 return true;
             }
         }
@@ -99,7 +98,7 @@ public class CustomListImpl implements CustomListInterface {
 
     @Override
     public int lastIndexOf(String item) {
-        for (int i = size(); i >= 0; i--) {
+        for (int i = size()-1; i >= 0; i--) {
             if (Objects.equals(item, stringsList[i])) {
                 return i;
             }
@@ -117,7 +116,7 @@ public class CustomListImpl implements CustomListInterface {
 
     @Override
     public boolean equals(String[] otherList) {
-        if (size() != otherList.length){
+        if (size() != otherList.length) {
             return false;
         }
         int count = 0;
@@ -126,7 +125,7 @@ public class CustomListImpl implements CustomListInterface {
                 count++;
             }
         }
-        return count==size();
+        return count == size();
     }
 
     @Override
