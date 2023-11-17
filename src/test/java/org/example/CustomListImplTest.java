@@ -1,6 +1,8 @@
 package org.example;
 
 import org.example.exceptions.CellIsNotEmptyException;
+import org.example.exceptions.InvalidIndexException;
+import org.example.exceptions.NullItemException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,7 +39,7 @@ public class CustomListImplTest {
 
     @Test
     void notNullAddTest() {
-        assertThrows(IllegalArgumentException.class, () -> customListImpl.add(null));
+        assertThrows(NullItemException.class, () -> customListImpl.add(null));
     }
 
     @Test
@@ -47,7 +49,7 @@ public class CustomListImplTest {
         customList.add("dog");
 
         assertEquals("rat", customList.add(2, "rat"));
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> customList.add(5, "bat"));
+        assertThrows(InvalidIndexException.class, () -> customList.add(5, "bat"));
         assertThrows(CellIsNotEmptyException.class, () -> customList.add(1, "bat"));
     }
 
@@ -59,7 +61,7 @@ public class CustomListImplTest {
 
         assertEquals("bat", customList.set(1, "bat"));
         assertEquals("bat", customList.get(1));
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> customList.set(5, "rat"));
+        assertThrows(InvalidIndexException.class, () -> customList.set(5, "rat"));
     }
 
     @Test
@@ -124,7 +126,7 @@ public class CustomListImplTest {
 
         assertEquals("cat", customList.get(0));
         assertEquals("dog", customList.get(1));
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> customList.get(2));
+        assertThrows(InvalidIndexException.class, () -> customList.get(2));
     }
 
     @Test
@@ -160,24 +162,21 @@ public class CustomListImplTest {
 
     @Test
     void clearTest() {
-        CustomListImpl customList = new CustomListImpl(5);
-        customList.add("cat");
-        customList.add("dog");
 
-        customList.clear();
+        customListImpl.add("cat");
+        customListImpl.add("dog");
 
-        assertTrue(customList.isEmpty());
+        customListImpl.clear();
+
+        assertTrue(customListImpl.isEmpty());
     }
 
     @Test
     void toArrayTest() {
-        CustomListImpl customList = new CustomListImpl(5);
-        customList.add("cat");
-        customList.add("dog");
-
+        customListImpl.add("cat");
+        customListImpl.add("dog");
         String[] expectedArray = {"cat", "dog"};
-        assertArrayEquals(expectedArray, customList.toArray());
+        assertArrayEquals(expectedArray, customListImpl.toArray());
     }
-
 }
 

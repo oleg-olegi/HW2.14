@@ -1,6 +1,9 @@
 package org.example;
 
+import com.sun.jdi.InvalidCodeIndexException;
 import org.example.exceptions.CellIsNotEmptyException;
+import org.example.exceptions.InvalidIndexException;
+import org.example.exceptions.NullItemException;
 
 import java.util.Objects;
 
@@ -27,9 +30,7 @@ public class CustomListImpl implements CustomListInterface {
 
     @Override
     public String add(String item) {
-        if (item == null) {
-            throw new IllegalArgumentException();
-        }
+        validateItem(item);
         for (int i = 0; i < size(); i++) {
             if (stringsList[i] == null) {
                 stringsList[i] = item;
@@ -42,6 +43,8 @@ public class CustomListImpl implements CustomListInterface {
 
     @Override
     public String add(int index, String item) {
+        validateIndex(index);
+        validateItem(item);
         if (stringsList[index] == null && index < size() && 0 < index) {
             stringsList[index] = item;
             countOfItems++;
@@ -52,12 +55,15 @@ public class CustomListImpl implements CustomListInterface {
 
     @Override
     public String set(int index, String item) {
+        validateIndex(index);
+        validateItem(item);
         stringsList[index] = item;
         return item;
     }
 
     @Override
     public String remove(String item) {
+        validateItem(item);
         for (int i = 0; i < size(); i++) {
             if (Objects.equals(stringsList[i], item)) {
                 stringsList[i] = null;
@@ -70,6 +76,7 @@ public class CustomListImpl implements CustomListInterface {
 
     @Override
     public String remove(int index) {
+        validateIndex(index);
         stringsList[index] = null;
         countOfItems--;
         return stringsList[index];
@@ -77,6 +84,7 @@ public class CustomListImpl implements CustomListInterface {
 
     @Override
     public boolean contains(String item) {
+        validateItem(item);
         for (String e : stringsList) {
             if (Objects.equals(e, item)) {
                 return true;
@@ -87,6 +95,7 @@ public class CustomListImpl implements CustomListInterface {
 
     @Override
     public int indexOf(String item) {
+        validateItem(item);
         for (int i = 0; i < size(); i++) {
             if (Objects.equals(stringsList[i], item)) {//метод для обхода NullPointerException
                 return i;
@@ -98,7 +107,8 @@ public class CustomListImpl implements CustomListInterface {
 
     @Override
     public int lastIndexOf(String item) {
-        for (int i = size()-1; i >= 0; i--) {
+        validateItem(item);
+        for (int i = size() - 1; i >= 0; i--) {
             if (Objects.equals(item, stringsList[i])) {
                 return i;
             }
@@ -108,9 +118,7 @@ public class CustomListImpl implements CustomListInterface {
 
     @Override
     public String get(int index) {
-        if (index > countOfItems || stringsList[index] == null) {
-            throw new ArrayIndexOutOfBoundsException("Invalid index");
-        }
+        validateIndex(index);
         return stringsList[index];
     }
 
@@ -157,5 +165,17 @@ public class CustomListImpl implements CustomListInterface {
             }
         }
         return newArray;
+    }
+
+    private void validateItem(String item) {
+        if (item == null) {
+            throw new NullItemException("Item == null");
+        }
+    }
+
+    private void validateIndex(int index) {
+        if (index < 0 || index >= size()) {
+            throw new InvalidIndexException("Invalid Index");
+        }
     }
 }
