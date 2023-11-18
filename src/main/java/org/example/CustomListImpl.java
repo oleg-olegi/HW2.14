@@ -1,7 +1,5 @@
 package org.example;
 
-import com.sun.jdi.InvalidCodeIndexException;
-import org.example.exceptions.CellIsNotEmptyException;
 import org.example.exceptions.InvalidIndexException;
 import org.example.exceptions.NullItemException;
 
@@ -31,13 +29,10 @@ public class CustomListImpl implements CustomListInterface {
     @Override
     public String add(String item) {
         validateItem(item);
-        for (int i = 0; i < size(); i++) {
-            if (stringsList[i] == null) {
-                stringsList[i] = item;
-                countOfItems++;
-                break;
-            }
-        }
+        stringsList[countOfItems++] = item;
+        countOfItems++;
+
+
         return item;
     }
 
@@ -45,12 +40,14 @@ public class CustomListImpl implements CustomListInterface {
     public String add(int index, String item) {
         validateIndex(index);
         validateItem(item);
-        if (stringsList[index] == null && index < size() && 0 < index) {
+        if (index == countOfItems) {
             stringsList[index] = item;
-            countOfItems++;
             return item;
         }
-        throw new CellIsNotEmptyException("Ячейка занята");
+        System.arraycopy(stringsList, index, stringsList, index + 1, countOfItems - index);
+        stringsList[index] = item;
+        countOfItems++;
+        return item;
     }
 
     @Override
@@ -64,33 +61,30 @@ public class CustomListImpl implements CustomListInterface {
     @Override
     public String remove(String item) {
         validateItem(item);
-        for (int i = 0; i < size(); i++) {
-            if (Objects.equals(stringsList[i], item)) {
-                stringsList[i] = null;
-                countOfItems--;
-                return item;
-            }
+        int index = indexOf(item);
+        if (index != -1) {
+            System.arraycopy(stringsList, index + 1, stringsList, index, countOfItems - (index + 1));
+            countOfItems--;
         }
-        throw new IllegalArgumentException("Item not found");
+        return remove(index);
     }
+
 
     @Override
     public String remove(int index) {
         validateIndex(index);
-        stringsList[index] = null;
-        countOfItems--;
-        return stringsList[index];
+        String item = stringsList[index];
+        if (index != -1) {
+            System.arraycopy(stringsList, index + 1, stringsList, index, countOfItems - (index + 1));
+            countOfItems--;
+        }
+        return item;
     }
 
     @Override
     public boolean contains(String item) {
         validateItem(item);
-        for (String e : stringsList) {
-            if (Objects.equals(e, item)) {
-                return true;
-            }
-        }
-        return false;
+        return indexOf(item) != -1;
     }
 
     @Override

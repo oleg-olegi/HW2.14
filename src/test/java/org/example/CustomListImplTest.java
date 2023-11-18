@@ -1,6 +1,5 @@
 package org.example;
 
-import org.example.exceptions.CellIsNotEmptyException;
 import org.example.exceptions.InvalidIndexException;
 import org.example.exceptions.NullItemException;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +49,7 @@ public class CustomListImplTest {
 
         assertEquals("rat", customList.add(2, "rat"));
         assertThrows(InvalidIndexException.class, () -> customList.add(5, "bat"));
-        assertThrows(CellIsNotEmptyException.class, () -> customList.add(1, "bat"));
+        assertThrows(InvalidIndexException.class, () -> customList.add(1, "bat"));
     }
 
     @Test
