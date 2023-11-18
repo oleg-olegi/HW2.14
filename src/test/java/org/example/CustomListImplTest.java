@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.exceptions.InvalidIndexException;
+import org.example.exceptions.ItemNOtFoundException;
 import org.example.exceptions.NullItemException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,7 +50,9 @@ public class CustomListImplTest {
 
         assertEquals("rat", customList.add(2, "rat"));
         assertThrows(InvalidIndexException.class, () -> customList.add(5, "bat"));
-        assertThrows(InvalidIndexException.class, () -> customList.add(1, "bat"));
+        assertThrows(InvalidIndexException.class, () -> customList.add(-1, "bull"));
+        assertThrows(NullItemException.class, () -> customList.add(2, null));
+
     }
 
     @Test
@@ -71,7 +74,7 @@ public class CustomListImplTest {
 
         assertEquals("cat", customList.remove("cat"));
         assertEquals("dog", customList.get(1));
-        assertThrows(IllegalArgumentException.class, () -> customList.remove("rat"));
+        assertThrows(ItemNOtFoundException.class, () -> customList.remove("rat"));
     }
 
     @Test
@@ -79,9 +82,10 @@ public class CustomListImplTest {
         CustomListImpl customList = new CustomListImpl(5);
         customList.add("cat");
         customList.add("dog");
-
-        assertEquals(null, customList.remove(0));
-        assertEquals("dog", customList.get(1));
+        String removedItem = customList.remove(1);
+        assertEquals("dog", removedItem);
+        assertFalse(customList.contains(removedItem));
+        assertThrows(ItemNOtFoundException.class, () -> customList.remove(1));
     }
 
     @Test
@@ -125,7 +129,7 @@ public class CustomListImplTest {
 
         assertEquals("cat", customList.get(0));
         assertEquals("dog", customList.get(1));
-        assertThrows(InvalidIndexException.class, () -> customList.get(2));
+        assertThrows(ItemNOtFoundException.class, () -> customList.get(2));
     }
 
     @Test

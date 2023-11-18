@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.exceptions.InvalidIndexException;
+import org.example.exceptions.ItemNOtFoundException;
 import org.example.exceptions.NullItemException;
 
 import java.util.Objects;
@@ -30,9 +31,6 @@ public class CustomListImpl implements CustomListInterface {
     public String add(String item) {
         validateItem(item);
         stringsList[countOfItems++] = item;
-        countOfItems++;
-
-
         return item;
     }
 
@@ -63,20 +61,26 @@ public class CustomListImpl implements CustomListInterface {
         validateItem(item);
         int index = indexOf(item);
         if (index != -1) {
-            System.arraycopy(stringsList, index + 1, stringsList, index, countOfItems - (index + 1));
+            System.arraycopy(stringsList, index + 1, stringsList, index, size() - (index + 1));
             countOfItems--;
+        } else {
+            throw new ItemNOtFoundException("Item not found");
         }
-        return remove(index);
+        return item;
     }
 
 
     @Override
     public String remove(int index) {
         validateIndex(index);
-        String item = stringsList[index];
-        if (index != -1) {
-            System.arraycopy(stringsList, index + 1, stringsList, index, countOfItems - (index + 1));
+        String item;
+        if (stringsList[index] != null) {
+            item = stringsList[index];
+            System.arraycopy(stringsList, index + 1, stringsList, index, size() - (index + 1));
+            stringsList[size() - 1] = null;  // Очищаем последний элемент после сдвига
             countOfItems--;
+        } else {
+            throw new ItemNOtFoundException("Not found");
         }
         return item;
     }
@@ -113,6 +117,9 @@ public class CustomListImpl implements CustomListInterface {
     @Override
     public String get(int index) {
         validateIndex(index);
+        if (index > countOfItems-1) {
+            throw new ItemNOtFoundException("Not found");
+        }
         return stringsList[index];
     }
 
