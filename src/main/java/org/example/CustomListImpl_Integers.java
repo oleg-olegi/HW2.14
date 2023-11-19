@@ -87,12 +87,6 @@ public class CustomListImpl_Integers implements CustomListInterface<Integer> {
     }
 
     @Override
-    public boolean contains(Integer item) {
-        validateItem(item);
-        return indexOf(item) != -1;
-    }
-
-    @Override
     public int indexOf(Integer item) {
         validateItem(item);
         for (int i = 0; i < size(); i++) {
@@ -129,13 +123,12 @@ public class CustomListImpl_Integers implements CustomListInterface<Integer> {
         if (size() != otherList.length) {
             return false;
         }
-        int count = 0;
         for (int i = 0; i < size(); i++) {
-            if (Objects.equals(integersList[i], otherList[i])) {
-                count++;
+            if (!Objects.equals(integersList[i], otherList[i])) {
+                return false;
             }
         }
-        return count == size();
+        return true;
     }
 
     @Override
@@ -168,6 +161,37 @@ public class CustomListImpl_Integers implements CustomListInterface<Integer> {
         }
         return newArray;
     }
+
+    @Override
+    public boolean contains(Integer item) {
+        validateItem(item);
+        return binarySearch(getIntegersList(), item);
+    }
+
+    private void insertionSort(Integer[] array) {
+        SortedMthd.sortInsertion(array);
+    }
+
+    private boolean binarySearch(Integer[] array, Integer element) {
+        insertionSort(array);
+        int min = 0;
+        int max = array.length - 1;
+        while (min <= max) {
+            int mid = (min + max) / 2;
+            Integer midElement = array[mid]; // Получаем текущий элемент
+            if (midElement != null && midElement.equals(element)) {
+                // Если midElement не null и равен element, нашли элемент
+                return true;
+            }
+            if (element == null || (midElement != null && midElement < element)) {
+                min = mid + 1;
+            } else {
+                max = mid - 1;
+            }
+        }
+        return false; // Не нашли элемент
+    }
+
 
     private void validateItem(Integer item) {
         if (item == null) {

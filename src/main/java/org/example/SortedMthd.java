@@ -27,13 +27,15 @@ public class SortedMthd {
 
     public static Integer[] sortInsertion(Integer[] arr) {
         for (int i = 1; i < arr.length; i++) {
-            int temp = arr[i];
-            int j = i;
-            while (j > 0 && arr[j - 1] >= temp) {
-                arr[j] = arr[j - 1];
-                j--;
+            if (arr[i] != null) {
+                Integer temp = arr[i];//переменная для хранения текущего значения
+                Integer j = i;// индекс идущий в обратную сторону
+                while (j > 0 && (arr[j - 1] == null || arr[j - 1] >= temp)) {
+                    arr[j] = arr[j - 1];
+                    j--;
+                }
+                arr[j] = temp;
             }
-            arr[j] = temp;
         }
         return arr;
     }

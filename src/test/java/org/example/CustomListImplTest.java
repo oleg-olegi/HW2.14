@@ -31,19 +31,18 @@ public class CustomListImplTest {
     @ParameterizedTest
     @MethodSource("argumentsForTests")
     void addTest(String expectedString) {
-        String actual = customListImpl.add(expectedString);//actual
+        String actual = customListImpl.add(expectedString);
         assertNotNull(expectedString);
         assertEquals(expectedString, actual);
         assertTrue(customListImpl.contains(expectedString));//проверка, что добавленный элемент находится в списке
     }
-
     @Test
     void notNullAddTest() {
         assertThrows(NullItemException.class, () -> customListImpl.add(null));
     }
 
     @Test
-    void addAtIndexTest() {
+    void addWithIndexTest() {
         CustomListImpl customList = new CustomListImpl(5);
         customList.add("cat");
         customList.add("dog");
@@ -52,7 +51,6 @@ public class CustomListImplTest {
         assertThrows(InvalidIndexException.class, () -> customList.add(5, "bat"));
         assertThrows(InvalidIndexException.class, () -> customList.add(-1, "bull"));
         assertThrows(NullItemException.class, () -> customList.add(2, null));
-
     }
 
     @Test

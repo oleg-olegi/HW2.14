@@ -6,7 +6,7 @@ import org.example.exceptions.NullItemException;
 
 import java.util.Objects;
 
-public class CustomListImpl implements CustomListInterface <String>  {
+public class CustomListImpl implements CustomListInterface<String> {
     private int capacity;
     private int countOfItems = 0;
     private String[] stringsList;
@@ -117,7 +117,7 @@ public class CustomListImpl implements CustomListInterface <String>  {
     @Override
     public String get(int index) {
         validateIndex(index);
-        if (index > countOfItems-1) {
+        if (index > countOfItems - 1) {
             throw new ItemNOtFoundException("Not found");
         }
         return stringsList[index];
