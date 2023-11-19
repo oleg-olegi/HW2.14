@@ -6,62 +6,63 @@ import org.example.exceptions.NullItemException;
 
 import java.util.Objects;
 
-public class CustomListImpl implements CustomListInterface <String>  {
+public class CustomListImpl_Integers implements CustomListInterface<Integer> {
+
     private int capacity;
     private int countOfItems = 0;
-    private String[] stringsList;
+    private Integer[] integersList;
 
-    public CustomListImpl(int initialCapacity) {
+    public CustomListImpl_Integers(int initialCapacity) {
         if (initialCapacity < 0) {
             throw new IllegalArgumentException("Capacity<0");
         }
         this.capacity = initialCapacity;
-        this.stringsList = new String[capacity];
+        this.integersList = new Integer[capacity];
     }
 
-    public String[] getStringsList() {
-        return this.stringsList;
+    public Integer[] getIntegersList() {
+        return this.integersList;
     }
 
     public int size() {
-        return stringsList.length;
+        return integersList.length;
     }
 
     @Override
-    public String add(String item) {
+    public Integer add(Integer item) {
         validateItem(item);
-        stringsList[countOfItems++] = item;
+        integersList[countOfItems++] = item;
         return item;
     }
 
     @Override
-    public String add(int index, String item) {
+    public Integer add(int index, Integer item) {
         validateIndex(index);
         validateItem(item);
         if (index == countOfItems) {
-            stringsList[index] = item;
+            integersList[index] = item;
             return item;
         }
-        System.arraycopy(stringsList, index, stringsList, index + 1, countOfItems - index);
-        stringsList[index] = item;
+        System.arraycopy(integersList, index, integersList, index + 1, countOfItems - index);
+        integersList[index] = item;
         countOfItems++;
         return item;
     }
 
     @Override
-    public String set(int index, String item) {
+    public Integer set(int index, Integer item) {
         validateIndex(index);
         validateItem(item);
-        stringsList[index] = item;
+        integersList[index] = item;
         return item;
     }
 
     @Override
-    public String remove(String item) {
+    public Integer remove(Integer item) {
         validateItem(item);
         int index = indexOf(item);
         if (index != -1) {
-            System.arraycopy(stringsList, index + 1, stringsList, index, size() - (index + 1));
+            System.arraycopy(integersList, index + 1, integersList, index, size() - (index + 1));
             countOfItems--;
         } else {
             throw new ItemNOtFoundException("Item not found");
@@ -71,13 +72,13 @@ public class CustomListImpl implements CustomListInterface <String>  {
 
 
     @Override
-    public String remove(int index) {
+    public Integer remove(int index) {
         validateIndex(index);
-        String item;
-        if (stringsList[index] != null) {
-            item = stringsList[index];
-            System.arraycopy(stringsList, index + 1, stringsList, index, size() - (index + 1));
-            stringsList[size() - 1] = null;  // Очищаем последний элемент после сдвига
+        Integer item;
+        if (integersList[index] != null) {
+            item = integersList[index];
+            System.arraycopy(integersList, index + 1, integersList, index, size() - (index + 1));
+            integersList[size() - 1] = null;  // Очищаем последний элемент после сдвига
             countOfItems--;
         } else {
             throw new ItemNOtFoundException("Not found");
@@ -86,16 +87,16 @@ public class CustomListImpl implements CustomListInterface <String>  {
     }
 
     @Override
-    public boolean contains(String item) {
+    public boolean contains(Integer item) {
         validateItem(item);
         return indexOf(item) != -1;
     }
 
     @Override
-    public int indexOf(String item) {
+    public int indexOf(Integer item) {
         validateItem(item);
         for (int i = 0; i < size(); i++) {
-            if (Objects.equals(stringsList[i], item)) {//метод для обхода NullPointerException
+            if (Objects.equals(integersList[i], item)) {//метод для обхода NullPointerException
                 return i;
             }
         }
@@ -104,10 +105,10 @@ public class CustomListImpl implements CustomListInterface <String>  {
 
 
     @Override
-    public int lastIndexOf(String item) {
+    public int lastIndexOf(Integer item) {
         validateItem(item);
         for (int i = size() - 1; i >= 0; i--) {
-            if (Objects.equals(item, stringsList[i])) {
+            if (Objects.equals(item, integersList[i])) {
                 return i;
             }
         }
@@ -115,22 +116,22 @@ public class CustomListImpl implements CustomListInterface <String>  {
     }
 
     @Override
-    public String get(int index) {
+    public Integer get(int index) {
         validateIndex(index);
-        if (index > countOfItems-1) {
+        if (index > countOfItems - 1) {
             throw new ItemNOtFoundException("Not found");
         }
-        return stringsList[index];
+        return integersList[index];
     }
 
     @Override
-    public boolean equals(String[] otherList) {
+    public boolean equals(Integer[] otherList) {
         if (size() != otherList.length) {
             return false;
         }
         int count = 0;
         for (int i = 0; i < size(); i++) {
-            if (Objects.equals(stringsList[i], otherList[i])) {
+            if (Objects.equals(integersList[i], otherList[i])) {
                 count++;
             }
         }
@@ -149,26 +150,26 @@ public class CustomListImpl implements CustomListInterface <String>  {
 
     @Override
     public void clear() {
-        for (String e : stringsList) {
+        for (Integer e : integersList) {
             e = null;
         }
         countOfItems = 0;
     }
 
     @Override
-    public String[] toArray() {
-        String[] newArray = new String[countOfItems];
+    public Integer[] toArray() {
+        Integer[] newArray = new Integer[countOfItems];
         int counter = 0; //счетчик существующих объектов, если объеты добавлены в массив не по  порядку
         for (int i = 0; i < size(); i++) {
-            if (stringsList[i] != null) {
-                newArray[counter] = stringsList[i];
+            if (integersList[i] != null) {
+                newArray[counter] = integersList[i];
                 counter++;
             }
         }
         return newArray;
     }
 
-    private void validateItem(String item) {
+    private void validateItem(Integer item) {
         if (item == null) {
             throw new NullItemException("Item == null");
         }
@@ -180,3 +181,4 @@ public class CustomListImpl implements CustomListInterface <String>  {
         }
     }
 }
+
