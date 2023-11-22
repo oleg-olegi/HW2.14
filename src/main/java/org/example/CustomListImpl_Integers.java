@@ -9,7 +9,7 @@ import java.util.Objects;
 public class CustomListImpl_Integers implements CustomListInterface<Integer> {
 
     private int capacity;
-    private int countOfItems = 0;
+    private int currentIndex = 0;
     private Integer[] integersList;
 
     public CustomListImpl_Integers(int initialCapacity) {
@@ -31,7 +31,10 @@ public class CustomListImpl_Integers implements CustomListInterface<Integer> {
     @Override
     public Integer add(Integer item) {
         validateItem(item);
-        integersList[countOfItems++] = item;
+        if (currentIndex >= integersList.length) {
+            makeArrayGreatAgain();
+        }
+        integersList[currentIndex++] = item;
         return item;
     }
 
@@ -39,13 +42,16 @@ public class CustomListImpl_Integers implements CustomListInterface<Integer> {
     public Integer add(int index, Integer item) {
         validateIndex(index);
         validateItem(item);
-        if (index == countOfItems) {
+        if (currentIndex >= capacity) {
+            makeArrayGreatAgain();
+        }
+        if (index == currentIndex) {
             integersList[index] = item;
             return item;
         }
-        System.arraycopy(integersList, index, integersList, index + 1, countOfItems - index);
+        System.arraycopy(integersList, index, integersList, index + 1, currentIndex - index);
         integersList[index] = item;
-        countOfItems++;
+        currentIndex++;
         return item;
     }
 
@@ -63,7 +69,7 @@ public class CustomListImpl_Integers implements CustomListInterface<Integer> {
         int index = indexOf(item);
         if (index != -1) {
             System.arraycopy(integersList, index + 1, integersList, index, size() - (index + 1));
-            countOfItems--;
+            currentIndex--;
         } else {
             throw new ItemNOtFoundException("Item not found");
         }
@@ -79,7 +85,7 @@ public class CustomListImpl_Integers implements CustomListInterface<Integer> {
             item = integersList[index];
             System.arraycopy(integersList, index + 1, integersList, index, size() - (index + 1));
             integersList[size() - 1] = null;  // Очищаем последний элемент после сдвига
-            countOfItems--;
+            currentIndex--;
         } else {
             throw new ItemNOtFoundException("Not found");
         }
@@ -112,7 +118,7 @@ public class CustomListImpl_Integers implements CustomListInterface<Integer> {
     @Override
     public Integer get(int index) {
         validateIndex(index);
-        if (index > countOfItems - 1) {
+        if (index > currentIndex - 1) {
             throw new ItemNOtFoundException("Not found");
         }
         return integersList[index];
@@ -133,12 +139,12 @@ public class CustomListImpl_Integers implements CustomListInterface<Integer> {
 
     @Override
     public int number() { //вместо size
-        return countOfItems;
+        return currentIndex;
     }
 
     @Override
     public boolean isEmpty() {
-        return countOfItems == 0;
+        return currentIndex == 0;
     }
 
     @Override
@@ -146,12 +152,12 @@ public class CustomListImpl_Integers implements CustomListInterface<Integer> {
         for (Integer e : integersList) {
             e = null;
         }
-        countOfItems = 0;
+        currentIndex = 0;
     }
 
     @Override
     public Integer[] toArray() {
-        Integer[] newArray = new Integer[countOfItems];
+        Integer[] newArray = new Integer[currentIndex];
         int counter = 0; //счетчик существующих объектов, если объеты добавлены в массив не по  порядку
         for (int i = 0; i < size(); i++) {
             if (integersList[i] != null) {
@@ -192,6 +198,13 @@ public class CustomListImpl_Integers implements CustomListInterface<Integer> {
         return false; // Не нашли элемент
     }
 
+    private void makeArrayGreatAgain() {
+        int newCapacity = capacity * (3 / 2) + 1;
+        Integer[] grownArray = new Integer[newCapacity];
+        System.arraycopy(integersList, 0, grownArray, 0, capacity);
+        integersList = grownArray;
+        capacity = newCapacity;
+    }
 
     private void validateItem(Integer item) {
         if (item == null) {
@@ -203,6 +216,12 @@ public class CustomListImpl_Integers implements CustomListInterface<Integer> {
         if (index < 0 || index >= size()) {
             throw new InvalidIndexException("Invalid Index");
         }
+    }
+
+    public static void main(String[] args) {
+        CustomListImpl_Integers customList = new CustomListImpl_Integers(3);
+        customList.add(2);
+        System.out.println(customList.capacity);
     }
 }
 
